@@ -1,0 +1,12 @@
+{
+  "pages":[
+    "pages/userRegist/regist",
+    "pages/index/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "仿抖音小视频",
+    "navigationBarTextStyle":"black"
+  }
+}
