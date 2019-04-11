@@ -2,6 +2,7 @@
   "pages":[
     "pages/userLogin/login",
     "pages/userRegist/regist",
+    "pages/mine/mine",
     "pages/index/index"
   ],
   "window":{
