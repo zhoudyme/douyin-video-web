@@ -1,17 +1,11 @@
 <view>
 
   <view class='container'>
-
-    <block wx:if="{{isMe}}">
-      <image src="{{faceUrl}}" class="face" bindtap='changeFace'></image>
-    </block>
-    <block wx:if="{{!isMe}}">
-      <image src="{{faceUrl}}" class="face"></image>
-    </block>
+    <image src="{{faceUrl}}" class="face" bindtap='changeFace'></image>
     <label class='nickname'>{{nickname}}</label>
 
-      <button size='mini' class='primary' bindtap='uploadVideo'> 上传作品</button>
-      <button size='mini' type='' class='logout' bindtap='logout'>注销</button>
+    <button size='mini' class='primary' bindtap='uploadVideo'> 上传作品</button>
+    <button size='mini' type='' class='logout' bindtap='logout'>注销</button>
 
     <view class='container-row'>
       <label class='info-items'>{{fansCounts}} 粉丝</label>
