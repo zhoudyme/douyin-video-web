@@ -6,7 +6,40 @@ Page({
   },
 
   onLoad: function(params) {
-
+    var thiz = this
+    var serverUrl = app.serverUrl
+    var user = app.userInfo
+    wx.showLoading({
+      title: '请等待...',
+    })
+    // 调用后端
+    wx.request({
+      url: serverUrl + '/user/query?userId=' + user.id,
+      method: "GET",
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success: function(res) {
+        console.log(res.data);
+        wx.hideLoading()
+        if (res.data.status == 200) {
+          var userInofo = res.data.data
+          app.userInfo = res.data.data;
+          var faceUrl = "../resource/images/noneface.png"
+          if (userInofo.faceImage != null && userInofo.faceImage != '' &&
+            userInofo.faceImage != undefined) {
+            faceUrl = serverUrl + userInofo.faceImage
+          }
+          thiz.setData({
+            faceUrl: faceUrl,
+            fansCounts: userInofo.fansCounts,
+            followCounts: userInofo.followCounts,
+            receiveLikeCounts: userInofo.receiveLikeCounts,
+            nickname: userInofo.nickname
+          })
+        }
+      }
+    })
   },
 
   logout: function() {
@@ -42,6 +75,7 @@ Page({
   },
 
   changeFace: function() {
+    var thiz = this
     console.log('11')
     wx.chooseImage({
       count: 1,
@@ -62,18 +96,23 @@ Page({
             'content-type': 'application/json' // 默认值
           },
           success(res) {
-            const data = res.data
+            const data = JSON.parse(res.data)
             console.log(data)
             wx.hideLoading()
-            if (res.data.status == 200) {
+            if (data.status == 200) {
               wx.showToast({
                 title: '上传成功',
                 icon: 'success',
                 duration: 2000
               });
-            } else if (res.data.status == 200) {
+
+              var imageUrl = data.data;
+              thiz.setData({
+                faceUrl: serverUrl + imageUrl
+              })
+            } else if (data.status == 200) {
               wx.showToast({
-                title: res.data.msg
+                title: data.msg
               });
             }
           }
