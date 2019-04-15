@@ -119,6 +119,35 @@ Page({
         })
       },
     })
+  },
+
+  uploadVideo: function() {
+    var thiz = this
+    wx.chooseVideo({
+      sourceType: ['album'],
+      success(res) {
+        var duration = res.duration
+        var temheight = res.height
+        var temwidth = res.width
+        var temVideoUrl = res.tempFilePath
+        var temCoverUrl = res.thumbTempFilePath
+        if (duration >= 11) {
+          wx.showToast({
+            title: '视频长度不能超过10秒...',
+            icon: "none",
+            duration: 2500
+          })
+        } else if (duration < 1) {
+          wx.showToast({
+            title: '视频长度太短，请上传超过1秒的视频...',
+            icon: "none",
+            duration: 2500
+          })
+        } else {
+          //TODO 打开选择BGM页面
+        }
+      }
+    })
   }
 
 })
