@@ -1,11 +1,13 @@
 const app = getApp()
 
+//背景音乐选择
 Page({
   data: {
     bgmList: [],
     serverUrl: ''
   },
 
+  //页面加载时获取背景音乐列表
   onLoad: function() {
     var thiz = this
     var serverUrl = app.serverUrl;

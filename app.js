@@ -1,5 +1,7 @@
 //app.js
 App({
-  serverUrl:"http://localhost:8080",
-  userInfo:null
+  //后台地址
+  serverUrl: "http://localhost:8080",
+  //用户信息
+  userInfo: null
 })

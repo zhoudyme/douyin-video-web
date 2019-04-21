@@ -1,14 +1,13 @@
 const app = getApp()
 
+//用户登录
 Page({
-  data: {
-  },
+  data: {},
 
-  onLoad: function (params) {
-  },
+  onLoad: function(params) {},
 
   // 登录  
-  doLogin: function (e) {
+  doLogin: function(e) {
     var formObject = e.detail.value;
     var username = formObject.username;
     var password = formObject.password;
@@ -35,7 +34,7 @@ Page({
         header: {
           'content-type': 'application/json' // 默认值
         },
-        success: function (res) {
+        success: function(res) {
           console.log(res.data);
           wx.hideLoading()
           if (res.data.status == 200) {
@@ -49,7 +48,7 @@ Page({
             // 页面跳转  
             wx.redirectTo({
               url: '../mine/mine',
-            })     
+            })
           } else if (res.data.status == 500) {
             // 失败弹出框
             wx.showToast({
@@ -63,7 +62,8 @@ Page({
     }
   },
 
-  goRegistPage:function() {
+  //跳转到注册页面
+  goRegistPage: function() {
     wx.redirectTo({
       url: '../userRegist/regist',
     })

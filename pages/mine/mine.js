@@ -1,10 +1,12 @@
 const app = getApp()
 
+//个人信息
 Page({
   data: {
     faceUrl: "../resource/images/noneface.png",
   },
 
+  //页面加载获取用户详细信息
   onLoad: function(params) {
     var thiz = this
     var serverUrl = app.serverUrl
@@ -42,6 +44,7 @@ Page({
     })
   },
 
+  //注销
   logout: function() {
     var user = app.userInfo;
     var serverUrl = app.serverUrl;
@@ -74,6 +77,7 @@ Page({
     })
   },
 
+  //更换头像
   changeFace: function() {
     var thiz = this
     console.log('11')
@@ -121,6 +125,7 @@ Page({
     })
   },
 
+  //上传视频
   uploadVideo: function() {
     var thiz = this
     wx.chooseVideo({
