@@ -1,10 +1,10 @@
 <view>
   <form bindsubmit='upload'>
 
-    <radio-group>
+    <radio-group name="bgmId">
       <block wx:for="{{bgmList}}" wx:key="key">
-        <audio name="{{item.name}}" author="{{item.author}}" src="{{serverUrl}}{{item.path}}" id="myAudio" style='width:250px' controls loop></audio>
-      <radio style='margin-top:20px' value='{{item.id}}'></radio>
+        <audio name="{{item.name}}" author="{{item.author}}" src="{{serverUrl}}{{item.path}}" style='width:300px' id="myAudio" controls loop></audio>
+          <radio style='margin-top:20px;' value='{{item.id}}'></radio>
       </block>
     </radio-group>
 

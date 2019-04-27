@@ -7,7 +7,7 @@ Page({
   },
 
   //页面加载获取用户详细信息
-  onLoad: function(params) {
+  onLoad: function (params) {
     var thiz = this
     var serverUrl = app.serverUrl
     var user = app.userInfo
@@ -21,7 +21,7 @@ Page({
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success: function(res) {
+      success: function (res) {
         console.log(res.data);
         wx.hideLoading()
         if (res.data.status == 200) {
@@ -45,7 +45,7 @@ Page({
   },
 
   //注销
-  logout: function() {
+  logout: function () {
     var user = app.userInfo;
     var serverUrl = app.serverUrl;
     wx.showLoading({
@@ -58,7 +58,7 @@ Page({
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success: function(res) {
+      success: function (res) {
         console.log(res.data);
         wx.hideLoading()
         if (res.data.status == 200) {
@@ -78,14 +78,14 @@ Page({
   },
 
   //更换头像
-  changeFace: function() {
+  changeFace: function () {
     var thiz = this
     console.log('11')
     wx.chooseImage({
       count: 1,
       sizeType: ['compressed'],
       sourceType: ['album'],
-      success: function(res) {
+      success: function (res) {
         var tempFilePaths = res.tempFilePaths;
         console.log(tempFilePaths)
         var serverUrl = app.serverUrl
@@ -126,14 +126,14 @@ Page({
   },
 
   //上传视频
-  uploadVideo: function() {
+  uploadVideo: function () {
     var thiz = this
     wx.chooseVideo({
       sourceType: ['album'],
       success(res) {
         var duration = res.duration
-        var temheight = res.height
-        var temwidth = res.width
+        var temHeight = res.height
+        var temWidth = res.width
         var temVideoUrl = res.tempFilePath
         var temCoverUrl = res.thumbTempFilePath
         if (duration >= 11) {
@@ -149,7 +149,15 @@ Page({
             duration: 2500
           })
         } else {
-          //TODO 打开选择BGM页面
+          //打开选择bgm页面
+          wx.navigateTo({
+            url: '../chooseBgm/chooseBgm?duration=' + duration
+              + "&temHeight=" + temHeight
+              + "&temWidth=" + temWidth
+              + "&temVideoUrl=" + temVideoUrl
+              + "&temCoverUrl=" + temCoverUrl
+            ,
+          })
         }
       }
     })
