@@ -58,8 +58,6 @@ Page({
       title: '上传中...',
     })
     var serverUrl = app.serverUrl
-    console.log(temHeight)
-    console.log(temWidth)
     wx.uploadFile({
       url: serverUrl + '/video/upload',
       formData: {
@@ -82,8 +80,15 @@ Page({
         if (data.status == 200) {
           wx.showToast({
             title: '上传成功',
-            icon: 'success',
-            duration: 2000
+            icon: 'success'
+          });
+          wx.navigateBack({
+            delta: 1,
+          })
+        } else {
+          wx.showToast({
+            title: '上传失败',
+            icon: 'none'
           });
         }
       }
