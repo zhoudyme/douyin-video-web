@@ -58,10 +58,11 @@ Page({
       title: '上传中...',
     })
     var serverUrl = app.serverUrl
+    var userInfo = app.getGlobalUserInfo()
     wx.uploadFile({
       url: serverUrl + '/video/upload',
       formData: {
-        userId: app.userInfo.id,
+        userId: userInfo.id,
         bgmId: bgmId,
         desc: desc,
         videoSeconds: duration,

@@ -1,6 +1,4 @@
-  <view wx:for="{{videoList}}" class="item-container">  
-
-
+  <view wx:for="{{videoList}}" wx:key="index" class="item-container">  
 
      <view style='width:{{screenWidth}}px;height:210px;' class='back-img'> 
         <image src="{{serverUrl}}{{item.coverPath}}" style='width:{{screenWidth}}px;height:210px;' mode="aspectFit" bindtap='showVideoInfo' data-arrindex='{{index}}'></image>

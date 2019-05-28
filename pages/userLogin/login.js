@@ -44,7 +44,8 @@ Page({
               icon: 'success',
               duration: 2000
             });
-            app.userInfo = res.data.data;
+            // app.userInfo = res.data.data;
+            app.setGlobalUserInfo(res.data.data)
             // 页面跳转  
             wx.redirectTo({
               url: '../mine/mine',

@@ -7,7 +7,8 @@ Page({
     page: 1,
     videoList: [],
     screenWidth: 350,
-    serverUrl: ""
+    serverUrl: "",
+    searchContent: ""
   },
 
   onLoad: function(params) {
@@ -17,22 +18,37 @@ Page({
       screenWidth: screenWidth,
     });
 
+    var searchContent = params.search
+    var isSaveRecord = params.isSaveRecord
+    if (isSaveRecord == null || isSaveRecord == '' || isSaveRecord == undefined) {
+      isSaveRecord = 0
+    }
+
+    thiz.setData({
+      searchContent: searchContent
+    })
+
     //获取当前的分页数
     var page = thiz.data.page
-    thiz.getAllVideoList(page)
+    thiz.getAllVideoList(page, isSaveRecord)
 
   },
 
-  getAllVideoList: function(page) {
+  getAllVideoList: function (page, isSaveRecord) {
     var thiz = this;
     var serverUrl = app.serverUrl
     wx.showLoading({
       title: '加载中...',
     })
 
+    var searchContent = thiz.data.searchContent
+
     wx.request({
-      url: serverUrl + '/video/showAll?page=' + page,
-      method: "GET",
+      url: serverUrl + '/video/showAll?page=' + page + "&isSaveRecord=" + isSaveRecord,
+      method: "POST",
+      data: {
+        videoDesc: searchContent
+      },
       success: function(res) {
         wx.hideLoading()
         wx.hideNavigationBarLoading()
@@ -59,9 +75,9 @@ Page({
     })
   },
 
-  onPullDownRefresh:function(){
+  onPullDownRefresh: function() {
     wx.showNavigationBarLoading()
-    this.getAllVideoList(1)
+    this.getAllVideoList(1, 0)
   },
 
   onReachBottom: function() {
@@ -81,7 +97,7 @@ Page({
       return;
     }
     var page = currentPage + 1
-    thiz.getAllVideoList(page)
+    thiz.getAllVideoList(page, 0)
   }
 
 })
