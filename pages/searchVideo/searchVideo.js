@@ -27,7 +27,7 @@ Page({
           that.mySearchFunction, // 提供一个搜索回调函数
           that.myGobackFunction //提供一个返回回调函数
         );
-      }
+      } 
     })
 
   },

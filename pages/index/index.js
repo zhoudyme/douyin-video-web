@@ -34,7 +34,7 @@ Page({
 
   },
 
-  getAllVideoList: function (page, isSaveRecord) {
+  getAllVideoList: function(page, isSaveRecord) {
     var thiz = this;
     var serverUrl = app.serverUrl
     wx.showLoading({
@@ -98,6 +98,17 @@ Page({
     }
     var page = currentPage + 1
     thiz.getAllVideoList(page, 0)
+  },
+
+  showVideoInfo: function(e) {
+    var thiz = this
+    var videoList = thiz.data.videoList
+    var arrindex = e.target.dataset.arrindex
+    var videoInfo = JSON.stringify(videoList[arrindex])
+
+    wx.redirectTo({
+      url: '../videoinfo/videoinfo?videoInfo=' + videoInfo,
+    })
   }
 
 })

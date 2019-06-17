@@ -1,19 +1,14 @@
-
 function uploadVideo() {
-  var me = this;
-
+  var thiz = this
   wx.chooseVideo({
     sourceType: ['album'],
-    success: function (res) {
-      console.log(res);
-
-      var duration = res.duration;
-      var tmpHeight = res.height;
-      var tmpWidth = res.width;
-      var tmpVideoUrl = res.tempFilePath;
-      var tmpCoverUrl = res.thumbTempFilePath;
-
-      if (duration > 11) {
+    success(res) {
+      var duration = res.duration
+      var temHeight = res.height
+      var temWidth = res.width
+      var temVideoUrl = res.tempFilePath
+      var temCoverUrl = res.thumbTempFilePath
+      if (duration >= 11) {
         wx.showToast({
           title: '视频长度不能超过10秒...',
           icon: "none",
@@ -26,20 +21,17 @@ function uploadVideo() {
           duration: 2500
         })
       } else {
-        // 打开选择bgm的页面
+        //打开选择bgm页面
         wx.navigateTo({
-          url: '../chooseBgm/chooseBgm?duration=' + duration
-          + "&tmpHeight=" + tmpHeight
-          + "&tmpWidth=" + tmpWidth
-          + "&tmpVideoUrl=" + tmpVideoUrl
-          + "&tmpCoverUrl=" + tmpCoverUrl
-          ,
+          url: '../chooseBgm/chooseBgm?duration=' + duration +
+            "&temHeight=" + temHeight +
+            "&temWidth=" + temWidth +
+            "&temVideoUrl=" + temVideoUrl +
+            "&temCoverUrl=" + temCoverUrl,
         })
       }
-
     }
   })
-
 }
 
 module.exports = {
