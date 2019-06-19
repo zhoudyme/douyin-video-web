@@ -9,7 +9,7 @@ Page({
   },
 
   //页面加载获取用户详细信息
-  onLoad: function (params) {
+  onLoad: function(params) {
     var thiz = this
     var serverUrl = app.serverUrl
     // var user = app.userInfo
@@ -17,20 +17,25 @@ Page({
     wx.showLoading({
       title: '请等待...',
     })
+    console.log(user)
     // 调用后端
     wx.request({
       url: serverUrl + '/user/query?userId=' + user.id,
       method: "GET",
       header: {
-        'content-type': 'application/json' // 默认值
+        'content-type': 'application/json', // 默认值
+        'userId': user.id,
+        'userToken': user.userToken
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res.data);
         wx.hideLoading()
         if (res.data.status == 200) {
           var userInofo = res.data.data
           // app.userInfo = res.data.data;
-          app.setGlobalUserInfo(res.data.data)
+          // app.setGlobalUserInfo(res.data.data)
+          console.log(111)
+          console.log(res.data.data)
           var faceUrl = "../resource/images/noneface.png"
           if (userInofo.faceImage != null && userInofo.faceImage != '' &&
             userInofo.faceImage != undefined) {
@@ -43,13 +48,24 @@ Page({
             receiveLikeCounts: userInofo.receiveLikeCounts,
             nickname: userInofo.nickname
           })
+        } else if (res.data.status == 502) {
+          wx.showToast({
+            title: res.data.msg,
+            duration: 3000,
+            icon: "none",
+            success: function() {
+              wx.redirectTo({
+                url: '../userLogin/login',
+              })
+            }
+          })
         }
       }
     })
   },
 
   //注销
-  logout: function () {
+  logout: function() {
     // var user = app.userInfo;
     var user = app.getGlobalUserInfo()
     var serverUrl = app.serverUrl;
@@ -63,7 +79,7 @@ Page({
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res.data);
         wx.hideLoading()
         if (res.data.status == 200) {
@@ -84,14 +100,13 @@ Page({
   },
 
   //更换头像
-  changeFace: function () {
+  changeFace: function() {
     var thiz = this
-    console.log('11')
     wx.chooseImage({
       count: 1,
       sizeType: ['compressed'],
       sourceType: ['album'],
-      success: function (res) {
+      success: function(res) {
         var tempFilePaths = res.tempFilePaths;
         console.log(tempFilePaths)
         wx.showLoading({
@@ -121,10 +136,22 @@ Page({
               thiz.setData({
                 faceUrl: serverUrl + imageUrl
               })
-            } else if (data.status == 200) {
+            } else if (data.status == 500) {
               wx.showToast({
                 title: data.msg
               });
+            } else if (res.data.status == 502) {
+              wx.showToast({
+                title: res.data.msg,
+                duration: 2000,
+                icon: "none",
+                success: function() {
+                  wx.redirectTo({
+                    url: '../userLogin/login',
+                  })
+                }
+              });
+
             }
           }
         })
@@ -133,7 +160,7 @@ Page({
   },
 
   //上传视频
-  uploadVideo: function () {
+  uploadVideo: function() {
     //重构
     videoUtil.uploadVideo()
     // var thiz = this

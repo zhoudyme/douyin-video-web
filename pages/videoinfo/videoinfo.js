@@ -18,10 +18,19 @@ Page({
 
     //获取上一个页面传入的参数
     var videoInfo = JSON.parse(params.videoInfo)
+
+    var height = videoInfo.videoHeight
+    var width = videoInfo.videoWidth
+    var cover = "cover"
+    if (width >= height) {
+      cover = ""
+    }
+
     thiz.setData({
       videoId: videoInfo.id,
-      src: app.serverUrl + "/" + videoInfo.videoPath.replace("fileSpace",""),
-      videoInfo: videoInfo
+      src: app.serverUrl + "/" + videoInfo.videoPath.replace("fileSpace", ""),
+      videoInfo: videoInfo,
+      cover: cover
     })
   },
 
@@ -42,13 +51,42 @@ Page({
   },
 
   upload: function() {
-    videoUtil.uploadVideo()
+    var thiz = this
+    var user = app.getGlobalUserInfo()
+    var videoInfo = JSON.stringify(thiz.data.videoInfo)
+    var realUrl = '../videoinfo/videoinfo#videoInfo@' + videoInfo
+
+    if (user == null || user == undefined || user == '') {
+      wx.navigateTo({
+        url: '../userLogin/login?redirectUrl=' + realUrl,
+      })
+    } else {
+      videoUtil.uploadVideo()
+
+    }
+
   },
 
   showIndex: function() {
     wx.redirectTo({
       url: '../index/index',
     })
+  },
+
+  showMine: function() {
+
+    var user = app.getGlobalUserInfo()
+    if (user == null || user == undefined || user == '') {
+      wx.navigateTo({
+        url: '../userLogin/login',
+      })
+    } else {
+      wx.navigateTo({
+        url: '../mine/mine',
+      })
+    }
+
+
   }
 
 })

@@ -2,11 +2,11 @@
   "pages": [
     "pages/index/index",
     "pages/videoinfo/videoinfo",
-    "pages/userLogin/login",
     "pages/userRegist/regist",
     "pages/mine/mine",
     "pages/chooseBgm/chooseBgm",
-    "pages/searchVideo/searchVideo"
+    "pages/searchVideo/searchVideo",
+    "pages/userLogin/login"
   ],
   "window": {
     "backgroundTextStyle": "light",

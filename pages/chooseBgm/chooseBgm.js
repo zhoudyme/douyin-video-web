@@ -34,6 +34,17 @@ Page({
             bgmList: bgmList,
             serverUrl: serverUrl
           })
+        } else if (res.data.status == 502) {
+          wx.showToast({
+            title: res.data.msg,
+            duration: 2000,
+            icon: "none",
+            success: function() {
+              wx.redirectTo({
+                url: '../userLogin/login',
+              })
+            }
+          });
         }
       }
     })
@@ -86,6 +97,17 @@ Page({
           wx.navigateBack({
             delta: 1,
           })
+        } else if (res.data.status == 502) {
+          wx.showToast({
+            title: res.data.msg,
+            duration: 2000,
+            icon: "none",
+            success: function() {
+              wx.redirectTo({
+                url: '../userLogin/login',
+              })
+            }
+          });
         } else {
           wx.showToast({
             title: '上传失败',
