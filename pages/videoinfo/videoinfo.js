@@ -7,7 +7,9 @@ Page({
     cover: "cover",
     videoId: "",
     src: "",
-    videoInfo: {}
+    videoInfo: {},
+
+    userLikeVideo: false
   },
 
   videoCtx: {},
@@ -74,7 +76,6 @@ Page({
   },
 
   showMine: function() {
-
     var user = app.getGlobalUserInfo()
     if (user == null || user == undefined || user == '') {
       wx.navigateTo({
@@ -85,8 +86,45 @@ Page({
         url: '../mine/mine',
       })
     }
+  },
 
+  likeVideoOrNot: function() {
+    var thiz = this
+    var videoInfo = thiz.data.videoInfo
+    var user = app.getGlobalUserInfo()
+    if (user == null || user == undefined || user == '') {
+      wx.navigateTo({
+        url: '../userLogin/login',
+      })
+    } else {
+      var userLikeVideo = thiz.data.userLikeVideo
+      var url = "/video/userLike?userId=" + user.id + '&videoId=' + videoInfo.id +
+        '&videoCreatorId=' + videoInfo.userId
+      if (userLikeVideo) {
+        url = "/video/userUnLike?userId=" + user.id + '&videoId=' + videoInfo.id +
+          '&videoCreatorId=' + videoInfo.userId
+      }
 
+      var serverUrl = app.serverUrl;
+      wx.showLoading({
+        title: '...',
+      })
+      wx.request({
+        url: serverUrl + url,
+        method: 'POST',
+        header: {
+          'content-type': 'application/json', // 默认值
+          'userId': user.id,
+          'userToken': user.userToken
+        },
+        success: function(res) {
+          wx.hideLoading()
+          thiz.setData({
+            userLikeVideo: !userLikeVideo
+          })
+        }
+      })
+    }
   }
 
 })
