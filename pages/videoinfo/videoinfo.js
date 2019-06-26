@@ -34,6 +34,30 @@ Page({
       videoInfo: videoInfo,
       cover: cover
     })
+
+    var serverUrl = app.serverUrl
+    var user = app.getGlobalUserInfo()
+    var loginUserId = ""
+    if (user != null && user != undefined && user != '') {
+      loginUserId = user.id
+    }
+    wx.request({
+      url: serverUrl + '/user/queryPublisher?loginUserId=' + loginUserId + '&videoId=' +
+        videoInfo.id + "&publishUserId=" + videoInfo.userId,
+      method: "POST",
+      success: function(res) {
+        console.log(res.data)
+
+        var publisher = res.data.data.publisher
+        var userLikeVideo = res.data.data.userLikeVideo
+
+        thiz.setData({
+          serverUrl:serverUrl,
+          publisher: publisher,
+          userLikeVideo: userLikeVideo
+        })
+      }
+    })
   },
 
   onShow: function() {
@@ -50,6 +74,24 @@ Page({
     wx.navigateTo({
       url: '../searchVideo/searchVideo',
     })
+  },
+
+  showPublisher: function () {
+    var thiz = this
+    var user = app.getGlobalUserInfo()
+    var videoInfo = thiz.data.videoInfo
+    var realUrl = '../mine/mine#publisherId@' + videoInfo.userId
+
+    if (user == null || user == undefined || user == '') {
+      wx.navigateTo({
+        url: '../userLogin/login?redirectUrl=' + realUrl,
+      })
+    } else {
+        wx.navigateTo({
+          url: '../mine/mine?publisherId='+videoInfo.userId,
+        })
+    }
+
   },
 
   upload: function() {

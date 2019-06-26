@@ -11,16 +11,23 @@ Page({
   //页面加载获取用户详细信息
   onLoad: function(params) {
     var thiz = this
-    var serverUrl = app.serverUrl
+
     // var user = app.userInfo
     var user = app.getGlobalUserInfo()
+    var userId=user.id
+    var publisherId = params.publisherId
+    if (publisherId != null && publisherId != undefined && publisherId != ''){
+      userId = publisherId
+    }
+
+    var serverUrl = app.serverUrl
     wx.showLoading({
       title: '请等待...',
     })
     console.log(user)
     // 调用后端
     wx.request({
-      url: serverUrl + '/user/query?userId=' + user.id,
+      url: serverUrl + '/user/query?userId=' + userId,
       method: "GET",
       header: {
         'content-type': 'application/json', // 默认值
