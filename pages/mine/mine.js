@@ -6,6 +6,8 @@ const app = getApp()
 Page({
   data: {
     faceUrl: "../resource/images/noneface.png",
+    isMe: true,
+    isFollow: false
   },
 
   //页面加载获取用户详细信息
@@ -14,10 +16,15 @@ Page({
 
     // var user = app.userInfo
     var user = app.getGlobalUserInfo()
-    var userId=user.id
+    var userId = user.id
     var publisherId = params.publisherId
-    if (publisherId != null && publisherId != undefined && publisherId != ''){
+    if (publisherId != null && publisherId != undefined && publisherId != '') {
       userId = publisherId
+      thiz.setData({
+        isMe: false,
+        publisherId: publisherId,
+        serverUrl: app.serverUrl
+      })
     }
 
     var serverUrl = app.serverUrl
@@ -27,7 +34,7 @@ Page({
     console.log(user)
     // 调用后端
     wx.request({
-      url: serverUrl + '/user/query?userId=' + userId,
+      url: serverUrl + '/user/query?userId=' + userId + "&fanId=" + user.id,
       method: "GET",
       header: {
         'content-type': 'application/json', // 默认值
@@ -41,7 +48,6 @@ Page({
           var userInofo = res.data.data
           // app.userInfo = res.data.data;
           // app.setGlobalUserInfo(res.data.data)
-          console.log(111)
           console.log(res.data.data)
           var faceUrl = "../resource/images/noneface.png"
           if (userInofo.faceImage != null && userInofo.faceImage != '' &&
@@ -53,7 +59,8 @@ Page({
             fansCounts: userInofo.fansCounts,
             followCounts: userInofo.followCounts,
             receiveLikeCounts: userInofo.receiveLikeCounts,
-            nickname: userInofo.nickname
+            nickname: userInofo.nickname,
+            isFollow: userInofo.follow
           })
         } else if (res.data.status == 502) {
           wx.showToast({
@@ -68,6 +75,51 @@ Page({
           })
         }
       }
+    })
+  },
+
+  followMe: function(e) {
+    var thiz = this
+
+    var user = app.getGlobalUserInfo()
+    var userId = user.id
+    var publisherId = thiz.data.publisherId
+
+    var followType = e.currentTarget.dataset.followtype
+
+    //1：关注  0：取消关注
+    var url = ''
+    if (followType == '1') {
+      url = '/user/beYourFans?userId=' + publisherId + '&fanId=' + userId
+    } else {
+      url = '/user/dontBeYourFans?userId=' + publisherId + '&fanId=' + userId
+    }
+
+    wx.showLoading()
+    wx.request({
+      url: app.serverUrl + url,
+      method: "POST",
+      header: {
+        'content-type': 'application/json', // 默认值
+        'userId': user.id,
+        'userToken': user.userToken
+      },
+      success: function() {
+        wx.hideLoading()
+        if (followType == '1') {
+          thiz.setData({
+            isFollow: true,
+            fansCounts: ++thiz.data.fansCounts
+          })
+
+        } else {
+          thiz.setData({
+            isFollow: false,
+            fansCounts: --thiz.data.fansCounts
+          })
+        }
+      }
+
     })
   },
 
