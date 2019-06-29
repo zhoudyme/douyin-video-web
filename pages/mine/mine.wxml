@@ -32,3 +32,34 @@
 </view>
 
 <view class="line"></view>
+
+<view class='container-video'>
+  <!-- 发布过的作品 -->
+  <view class='{{videoSelClass}} {{isSelectedWork}}' bindtap='doSelectWork'>作品</view>
+  <!-- 收藏的点赞的视频 -->
+  <view class='{{videoSelClass}} {{isSelectedLike}}' bindtap='doSelectLike'>收藏</view>
+  <!-- 用户关注过人发表的视频 -->
+  <view class='{{videoSelClass}} {{isSelectedFollow}}' bindtap='doSelectFollow'>关注</view>
+</view>
+
+<view class='container-video-list'>
+
+  <view hidden='{{myWorkFalg}}'>
+    <block wx:for="{{myVideoList}}" wx:key="index">
+      <image src='{{serverUrl}}{{item.coverPath}}' class='videoImage' mode="aspectFill" bindtap='showVideo' data-arrindex='{{index}}'></image>
+    </block>
+  </view>
+
+  <view hidden='{{myLikesFalg}}'>
+    <block wx:for="{{likeVideoList}}" wx:key="index">
+      <image src='{{serverUrl}}{{item.coverPath}}' class='videoImage' mode="aspectFill" bindtap='showVideo' data-arrindex='{{index}}'></image>
+    </block>
+  </view>
+
+  <view hidden='{{myFollowFalg}}'>
+    <block wx:for="{{followVideoList}}" wx:key="index">
+      <image src='{{serverUrl}}{{item.coverPath}}' class='videoImage' mode="aspectFill" bindtap='showVideo' data-arrindex='{{index}}'></image>
+    </block>
+  </view>
+
+</view>
