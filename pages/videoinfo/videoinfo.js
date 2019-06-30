@@ -9,7 +9,12 @@ Page({
     src: "",
     videoInfo: {},
 
-    userLikeVideo: false
+    userLikeVideo: false,
+    commentsPage: 1,
+    commentsTotalPage: 1,
+    commentsList: [],
+
+    placeholder: "说点什么..."
   },
 
   videoCtx: {},
@@ -58,6 +63,8 @@ Page({
         })
       }
     })
+
+    thiz.getCommentsList(1);
   },
 
   onShow: function() {
@@ -235,5 +242,106 @@ Page({
       path: "pages/videoinfo/videoinfo?videoInfo=" + JSON.stringify(videoInfo)
     }
   },
+
+  leaveComment: function() {
+    this.setData({
+      commentFocus: true
+    });
+  },
+
+  replyFocus: function(e) {
+    var fatherCommentId = e.currentTarget.dataset.fathercommentid;
+    var toUserId = e.currentTarget.dataset.touserid;
+    var toNickname = e.currentTarget.dataset.tonickname;
+
+    this.setData({
+      placeholder: "回复  " + toNickname,
+      replyFatherCommentId: fatherCommentId,
+      replyToUserId: toUserId,
+      commentFocus: true
+    });
+  },
+
+  saveComment: function(e) {
+    var thiz = this;
+    var content = e.detail.value;
+
+    // 获取评论回复的fatherCommentId和toUserId
+    var fatherCommentId = e.currentTarget.dataset.replyfathercommentid;
+    var toUserId = e.currentTarget.dataset.replytouserid;
+
+    var user = app.getGlobalUserInfo();
+    var videoInfo = JSON.stringify(thiz.data.videoInfo);
+    var realUrl = '../videoinfo/videoinfo#videoInfo@' + videoInfo;
+
+    if (user == null || user == undefined || user == '') {
+      wx.navigateTo({
+        url: '../userLogin/login?redirectUrl=' + realUrl,
+      })
+    } else {
+      wx.showLoading({
+        title: '请稍后...',
+      })
+      wx.request({
+        url: app.serverUrl + '/video/saveComment?fatherCommentId=' + fatherCommentId + "&toUserId=" + toUserId,
+        method: 'POST',
+        header: {
+          'content-type': 'application/json', // 默认值
+          'userId': user.id,
+          'userToken': user.userToken
+        },
+        data: {
+          fromUserId: user.id,
+          videoId: thiz.data.videoInfo.id,
+          comment: content
+        },
+        success: function(res) {
+          console.log(res.data)
+          wx.hideLoading();
+
+          thiz.setData({
+            contentValue: "",
+            commentsList: []
+          });
+
+          thiz.getCommentsList(1);
+        }
+      })
+    }
+  },
+
+  getCommentsList: function(page) {
+    var thiz = this;
+
+    var videoId = thiz.data.videoInfo.id;
+
+    wx.request({
+      url: app.serverUrl + '/video/getVideoComments?videoId=' + videoId + "&page=" + page + "&pageSize=5",
+      method: "POST",
+      success: function(res) {
+        console.log(res.data);
+
+        var commentsList = res.data.data.rows;
+        var newCommentsList = thiz.data.commentsList;
+
+        thiz.setData({
+          commentsList: newCommentsList.concat(commentsList),
+          commentsPage: page,
+          commentsTotalPage: res.data.data.total
+        });
+      }
+    })
+  },
+
+  onReachBottom: function() {
+    var thiz = this;
+    var currentPage = thiz.data.commentsPage;
+    var totalPage = thiz.data.commentsTotalPage;
+    if (currentPage === totalPage) {
+      return;
+    }
+    var page = currentPage + 1;
+    thiz.getCommentsList(page);
+  }
 
 })

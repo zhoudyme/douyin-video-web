@@ -63,7 +63,7 @@ doLogin: function(e) {
             })
           } else {
             wx.redirectTo({
-              url: '../mine/mine',
+              url: '../index/index',
             })
           }
 
