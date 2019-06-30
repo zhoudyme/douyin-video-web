@@ -6,6 +6,7 @@
     "pages/mine/mine",
     "pages/chooseBgm/chooseBgm",
     "pages/searchVideo/searchVideo",
+    "pages/report/report",
     "pages/userLogin/login"
   ],
   "window": {
